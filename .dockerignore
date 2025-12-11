@@ -1,0 +1,40 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+.env
+.venv
+env/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Testing
+tests/
+pytest.ini
+
+# CI/CD
+.github/
+
+# Documentation
+*.md
+docs/
+
+# Development
+requirements-dev.txt
+docker-compose.yml
+Makefile
