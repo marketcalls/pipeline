@@ -35,6 +35,6 @@ pytest.ini
 docs/
 
 # Development
-requirements-dev.txt
 docker-compose.yml
 Makefile
+uv.lock

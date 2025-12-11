@@ -11,6 +11,7 @@ A production-ready Flask application with automated CI/CD pipeline that builds, 
 - Code quality checks (flake8, black, isort)
 - Security scanning (bandit, safety, trivy)
 - Automatic Docker Hub deployment
+- **uv** for fast Python package management
 
 ## Project Structure
 
@@ -27,24 +28,40 @@ A production-ready Flask application with automated CI/CD pipeline that builds, 
 │       └── ci-cd.yml        # CI/CD pipeline
 ├── Dockerfile               # Production container
 ├── docker-compose.yml       # Local development
-├── requirements.txt         # Production dependencies
-├── requirements-dev.txt     # Development dependencies
-├── run.py                   # Application entry point
-└── pyproject.toml           # Tool configurations
+├── pyproject.toml           # Dependencies and tool config
+└── run.py                   # Application entry point
 ```
 
 ## Quick Start
 
+### Prerequisites
+
+Install uv (fast Python package manager):
+
+```bash
+# Linux/Mac
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Windows (PowerShell)
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
 ### Local Development
 
 ```bash
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-venv\Scripts\activate     # Windows
+# Clone and enter directory
+cd flask-cicd-app
 
-# Install dependencies
-pip install -r requirements-dev.txt
+# Create virtual environment and install dependencies
+uv venv
+source .venv/bin/activate  # Linux/Mac
+.venv\Scripts\activate     # Windows
+
+# Install production dependencies
+uv pip install .
+
+# Install with dev dependencies
+uv pip install ".[dev]"
 
 # Run the application
 python run.py

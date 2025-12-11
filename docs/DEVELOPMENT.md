@@ -7,9 +7,19 @@ Guide for developing and contributing to the Flask CI/CD application.
 ### Requirements
 
 - Python 3.11 or higher
-- pip (Python package manager)
+- uv (Python package manager)
 - Git
 - Docker (optional, for containerized development)
+
+### Install uv
+
+```bash
+# Linux/Mac
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Windows (PowerShell)
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
 
 ### Initial Setup
 
@@ -18,17 +28,17 @@ Guide for developing and contributing to the Flask CI/CD application.
 git clone https://github.com/YOUR_USERNAME/flask-cicd-app.git
 cd flask-cicd-app
 
-# Create virtual environment
-python -m venv venv
+# Create virtual environment with uv
+uv venv
 
 # Activate virtual environment
 # Windows:
-venv\Scripts\activate
+.venv\Scripts\activate
 # Linux/Mac:
-source venv/bin/activate
+source .venv/bin/activate
 
-# Install development dependencies
-pip install -r requirements-dev.txt
+# Install all dependencies (including dev)
+uv pip install ".[dev]"
 ```
 
 ## Project Structure
@@ -45,10 +55,8 @@ flask-cicd-app/
 ├── .github/workflows/      # CI/CD pipeline
 ├── Dockerfile             # Container definition
 ├── docker-compose.yml     # Local container orchestration
-├── requirements.txt       # Production dependencies
-├── requirements-dev.txt   # Development dependencies
-├── run.py                 # Application entry point
-└── pyproject.toml         # Tool configuration
+├── pyproject.toml         # Dependencies and tool config
+└── run.py                 # Application entry point
 ```
 
 ## Running the Application
@@ -181,7 +189,7 @@ def test_example_endpoint(client):
 bandit -r app/
 
 # Check dependencies for vulnerabilities
-safety check -r requirements.txt
+safety check
 ```
 
 ### Best Practices
@@ -265,23 +273,52 @@ docker-compose logs -f
 docker-compose exec flask-app /bin/bash
 ```
 
-## Dependencies
+## Dependency Management with uv
 
 ### Adding Dependencies
 
 ```bash
-# Production dependency
-pip install package-name
-pip freeze | grep package-name >> requirements.txt
+# Add production dependency - edit pyproject.toml [project.dependencies]
+# Then reinstall:
+uv pip install .
 
-# Development dependency
-pip install package-name
-pip freeze | grep package-name >> requirements-dev.txt
+# Add dev dependency - edit pyproject.toml [project.optional-dependencies.dev]
+# Then reinstall:
+uv pip install ".[dev]"
 ```
 
 ### Updating Dependencies
 
 ```bash
-pip install --upgrade package-name
-pip freeze > requirements.txt
+# Update all packages
+uv pip install --upgrade .
+
+# Update specific package
+uv pip install --upgrade flask
 ```
+
+### Listing Installed Packages
+
+```bash
+uv pip list
+```
+
+### Creating Lock File (Optional)
+
+```bash
+# Generate requirements.txt from current environment
+uv pip freeze > requirements.lock
+```
+
+## uv vs pip Comparison
+
+| Task | pip | uv |
+|------|-----|-----|
+| Create venv | `python -m venv .venv` | `uv venv` |
+| Install package | `pip install flask` | `uv pip install flask` |
+| Install from pyproject.toml | `pip install .` | `uv pip install .` |
+| Install with extras | `pip install ".[dev]"` | `uv pip install ".[dev]"` |
+| List packages | `pip list` | `uv pip list` |
+| Freeze | `pip freeze` | `uv pip freeze` |
+
+uv is 10-100x faster than pip for most operations.

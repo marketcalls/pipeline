@@ -5,32 +5,55 @@ Complete guide for setting up the Flask CI/CD pipeline.
 ## Prerequisites
 
 - Python 3.11+
+- uv (Python package manager)
 - Docker and Docker Compose
 - Git
 - GitHub account
 - Docker Hub account
 
-## Step 1: Clone and Local Setup
+## Step 1: Install uv
+
+uv is an extremely fast Python package manager written in Rust.
+
+### Linux/Mac
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+### Windows (PowerShell)
+
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+### Verify Installation
+
+```bash
+uv --version
+```
+
+## Step 2: Clone and Local Setup
 
 ```bash
 # Clone the repository
 git clone https://github.com/YOUR_USERNAME/flask-cicd-app.git
 cd flask-cicd-app
 
-# Create virtual environment
-python -m venv venv
+# Create virtual environment with uv
+uv venv
 
 # Activate virtual environment
 # Windows:
-venv\Scripts\activate
+.venv\Scripts\activate
 # Linux/Mac:
-source venv/bin/activate
+source .venv/bin/activate
 
-# Install development dependencies
-pip install -r requirements-dev.txt
+# Install all dependencies (including dev)
+uv pip install ".[dev]"
 ```
 
-## Step 2: Verify Local Setup
+## Step 3: Verify Local Setup
 
 ```bash
 # Run tests
@@ -45,7 +68,7 @@ curl http://localhost:5000/health
 curl http://localhost:5000/api/v1/info
 ```
 
-## Step 3: Docker Hub Setup
+## Step 4: Docker Hub Setup
 
 ### Create Access Token
 
@@ -57,7 +80,7 @@ curl http://localhost:5000/api/v1/info
 6. Click **Generate**
 7. Copy the token immediately (you won't see it again)
 
-## Step 4: GitHub Repository Setup
+## Step 5: GitHub Repository Setup
 
 ### Create Repository
 
@@ -86,9 +109,9 @@ git push -u origin main
 | Name | Value |
 |------|-------|
 | `DOCKERHUB_USERNAME` | Your Docker Hub username |
-| `DOCKERHUB_TOKEN` | The access token from Step 3 |
+| `DOCKERHUB_TOKEN` | The access token from Step 4 |
 
-## Step 5: Verify Pipeline
+## Step 6: Verify Pipeline
 
 1. Make a small change to any file
 2. Commit and push:
@@ -108,7 +131,7 @@ Security ─┼─> Build & Push ─> Docker Hub
 Test ─────┘
 ```
 
-## Step 6: Pull and Run from Docker Hub
+## Step 7: Pull and Run from Docker Hub
 
 After successful pipeline:
 
@@ -121,6 +144,31 @@ docker run -p 5000:5000 YOUR_USERNAME/flask-cicd-app:latest
 
 # Verify
 curl http://localhost:5000/health
+```
+
+## Common uv Commands
+
+```bash
+# Create virtual environment
+uv venv
+
+# Install package
+uv pip install flask
+
+# Install from pyproject.toml
+uv pip install .
+
+# Install with extras (dev dependencies)
+uv pip install ".[dev]"
+
+# List installed packages
+uv pip list
+
+# Show package info
+uv pip show flask
+
+# Sync dependencies (install exact versions)
+uv pip sync
 ```
 
 ## Troubleshooting
@@ -159,6 +207,18 @@ docker build -t test-build .
 - Verify `DOCKERHUB_USERNAME` is correct (case-sensitive)
 - Regenerate Docker Hub access token if expired
 - Ensure token has write permissions
+
+### uv Not Found
+
+Ensure uv is in your PATH:
+
+```bash
+# Linux/Mac - add to ~/.bashrc or ~/.zshrc
+export PATH="$HOME/.local/bin:$PATH"
+
+# Windows - uv should be added to PATH automatically
+# If not, add %USERPROFILE%\.local\bin to your PATH
+```
 
 ## Next Steps
 

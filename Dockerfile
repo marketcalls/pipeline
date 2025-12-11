@@ -8,19 +8,23 @@ ENV PYTHONUNBUFFERED=1
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies and uv
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
+    && curl -LsSf https://astral.sh/uv/install.sh | sh \
     && rm -rf /var/lib/apt/lists/*
+
+# Add uv to PATH
+ENV PATH="/root/.local/bin:$PATH"
 
 # Create non-root user for security
 RUN groupadd -r appgroup && useradd -r -g appgroup appuser
 
-# Copy requirements first for better caching
-COPY requirements.txt .
+# Copy pyproject.toml first for better caching
+COPY pyproject.toml .
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Install Python dependencies with uv
+RUN uv pip install --system --no-cache .
 
 # Copy application code
 COPY app/ ./app/

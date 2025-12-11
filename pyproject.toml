@@ -1,3 +1,25 @@
+[project]
+name = "flask-cicd-app"
+version = "1.0.0"
+description = "Flask application with CI/CD pipeline"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "flask>=3.0.0",
+    "gunicorn>=21.2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.3",
+    "pytest-cov>=4.1.0",
+    "flake8>=6.1.0",
+    "black>=23.11.0",
+    "isort>=5.12.0",
+    "safety>=2.3.5",
+    "bandit>=1.7.6",
+]
+
 [tool.black]
 line-length = 100
 target-version = ['py311']
