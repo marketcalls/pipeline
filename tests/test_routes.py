@@ -6,7 +6,7 @@ def test_index_returns_welcome_message(client):
     response = client.get("/")
     assert response.status_code == 200
     data = response.get_json()
-    assert data["message"] == "Welcome to Flask CI/CD Pipeline"
+    assert data["message"] == "First pipeline learning test before trying out in openalgo"
     assert data["status"] == "running"
 
 
