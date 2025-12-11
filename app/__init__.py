@@ -9,6 +9,7 @@ def create_app(config_name=None):
         app.config["TESTING"] = True
 
     from app.routes import main_bp
+
     app.register_blueprint(main_bp)
 
     return app

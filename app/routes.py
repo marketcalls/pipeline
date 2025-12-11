@@ -18,8 +18,10 @@ def health():
 @main_bp.route("/api/v1/info")
 def info():
     """API info endpoint."""
-    return jsonify({
-        "app": "Flask CI/CD Demo",
-        "version": "1.0.0",
-        "endpoints": ["/", "/health", "/api/v1/info"],
-    })
+    return jsonify(
+        {
+            "app": "Flask CI/CD Demo",
+            "version": "1.0.0",
+            "endpoints": ["/", "/health", "/api/v1/info"],
+        }
+    )
