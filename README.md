@@ -2,6 +2,11 @@
 
 A production-ready Flask application with automated CI/CD pipeline that builds, tests, and deploys to Docker Hub.
 
+## Repository
+
+- **GitHub**: https://github.com/marketcalls/pipeline
+- **Docker Hub**: https://hub.docker.com/r/marketcalls/flask-cicd-app
+
 ## Features
 
 - Flask REST API with health check endpoints
@@ -49,8 +54,9 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 ### Local Development
 
 ```bash
-# Clone and enter directory
-cd flask-cicd-app
+# Clone the repository
+git clone https://github.com/marketcalls/pipeline.git
+cd pipeline
 
 # Create virtual environment and install dependencies
 uv venv
@@ -143,14 +149,14 @@ The GitHub Actions pipeline runs on every push and pull request to `main`/`maste
    - Push to Docker Hub
    - Trivy vulnerability scan
 
-### Setup Requirements
+### Setup GitHub Secrets
 
-Add these secrets to your GitHub repository:
+Add these secrets to your GitHub repository ([Settings > Secrets and variables > Actions](https://github.com/marketcalls/pipeline/settings/secrets/actions)):
 
-| Secret | Description |
-|--------|-------------|
-| `DOCKERHUB_USERNAME` | Your Docker Hub username |
-| `DOCKERHUB_TOKEN` | Docker Hub access token |
+| Secret | Description | How to Get |
+|--------|-------------|------------|
+| `DOCKERHUB_USERNAME` | Your Docker Hub username | Your Docker Hub account name |
+| `DOCKERHUB_TOKEN` | Docker Hub access token | [Create token here](https://hub.docker.com/settings/security) |
 
 See [docs/SETUP.md](docs/SETUP.md) for detailed setup instructions.
 
@@ -159,7 +165,7 @@ See [docs/SETUP.md](docs/SETUP.md) for detailed setup instructions.
 After successful pipeline execution, the image is available at:
 
 ```bash
-docker pull YOUR_USERNAME/flask-cicd-app:latest
+docker pull marketcalls/flask-cicd-app:latest
 ```
 
 ## Configuration
@@ -180,4 +186,4 @@ Tool configurations are in `pyproject.toml`:
 
 ## License
 
-MIT License
+MIT License - see [LICENSE](LICENSE) file for details.
