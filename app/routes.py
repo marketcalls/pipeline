@@ -6,10 +6,12 @@ main_bp = Blueprint("main", __name__)
 @main_bp.route("/")
 def index():
     """Root endpoint returning welcome message."""
-    return jsonify({
-        "message": "First pipeline learning test before trying out in openalgo",
-        "status": "running",
-    })
+    return jsonify(
+        {
+            "message": "First pipeline learning test before trying out in openalgo",
+            "status": "running",
+        }
+    )
 
 
 @main_bp.route("/health")
